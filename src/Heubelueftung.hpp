@@ -14,12 +14,9 @@
 #include <vector>
 #include <string>
 #include "libraries/json.hpp"
-#include "_HmiButton.hpp"
+#include "HmiButton.hpp"
+#include "Subsystem.hpp"
 
-
-class Subsystem{
-
-};
 
 class Heubelueftung : public Subsystem{
 public:
@@ -39,7 +36,7 @@ public:
 
     void update();
 
-    std::string handleWebRequest(std::string requestUrl, std::string requestContent);
+    json handleWebRequest(const HttpRequest& request);
 
 private:
     bool m_hasTachometer;

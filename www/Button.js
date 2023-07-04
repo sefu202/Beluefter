@@ -27,7 +27,7 @@ class Button{
         this.element.onclick = this.onClick.bind(this);
         this.update();
 
-        this.intervalId = setInterval(this.update.bind(this), 100);
+        this.intervalId = setInterval(this.update.bind(this), 2000);
     }
 
     /**

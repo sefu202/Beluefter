@@ -13,11 +13,20 @@
 #include <string>
 
 #include "Socket/LinuxTcpSocket.hpp"
-#include "_HmiButton.hpp"
+#include "HmiButton.hpp"
 
 #include "HttpRequest.hpp"
 #include "Heubelueftung.hpp"
 #include "libraries/json.hpp"
+
+void printTree(std::string path, Subsystem& subsystem){
+    std::cout << path << std::endl;
+    if (!subsystem.getAllChildren().empty()){
+        for (auto& [childId, child] : subsystem.getAllChildren()){
+            printTree(path + "/"+ childId, child);
+        }
+    }
+}
 
 
 int main() {
@@ -35,7 +44,9 @@ int main() {
 
     heubelueftungCfg["properties"] = heubelueftungCfgProperties;
 
-    Heubelueftung heubelueftung();
+    Heubelueftung heubelueftung(heubelueftungCfg);
+
+    printTree("/heubelueftung",heubelueftung);
 
     /*HmiButton btnRcOn;
     HmiButton btnAuto;

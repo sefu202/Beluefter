@@ -8,13 +8,13 @@
  * @copyright Copyright (c) 2023
  * 
  */
-#include "_HmiButton.hpp"
+#include "HmiButton.hpp"
 #include "libraries/json.hpp"
 #include <iostream>
 
 using nlohmann::json;
 
-std::string HmiButton::handleWebRequest(const HttpRequest& request){
+json HmiButton::handleWebRequest(const HttpRequest& request){
     if (request.getMethod() == "POST" && !m_isDisabled && m_isVisible){
         try{
             std::cout << request.getBody() << std::endl;
@@ -40,7 +40,7 @@ std::string HmiButton::handleWebRequest(const HttpRequest& request){
     response["isVisible"]       = m_isVisible;
     response["errorOnClick"]    = m_errorOnClick;
 
-    return response.dump(4);
+    return response;
 }
 
 void HmiButton::setState(bool isOn){

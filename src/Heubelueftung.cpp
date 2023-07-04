@@ -16,6 +16,10 @@
 using nlohmann::json;
 
 Heubelueftung::Heubelueftung(const json& systemCfg){
+    registerChild("btnOn", m_btnOn);
+    registerChild("btnControlType", m_btnControlType);
+    registerChild("btnControlMode", m_btnControlMode);
+
     json properties = systemCfg.at("properties");
     m_hasTachometer = properties.at("tachometer").get<bool>();
 
@@ -58,7 +62,7 @@ void Heubelueftung::simulate()
 void Heubelueftung::update(){
 }
 
-std::string Heubelueftung::handleWebRequest(std::string request, std::string requestContent){
+json Heubelueftung::handleWebRequest(const HttpRequest& request){
     simulate();
     json response;
 

@@ -13,19 +13,26 @@
 
 #include <string>
 #include "HttpRequest.hpp"
+#include "Subsystem.hpp"
+#include "libraries/json.hpp"
+
+class Widget : public Subsystem {
+
+};
 
 /**
  * @class HmiButton 
  * @brief Button for HMI visu
  */
-class HmiButton {
+class HmiButton : public Widget {
 public:
+    using json = nlohmann::json;
     /**
      * @brief Handles Web Request
      * @param request received request
-     * @return std::string reply
+     * @return json reply
      */
-    std::string handleWebRequest(const HttpRequest& request);
+    json handleWebRequest(const HttpRequest& request);
 
     /**
      * @brief Set the State of the button
