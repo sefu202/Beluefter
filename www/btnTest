@@ -1,0 +1,6 @@
+{
+    "isOn": true,
+    "isDisabled": false,
+    "isVisible": true,
+    "errorOnClick": "This button is disabled"
+}

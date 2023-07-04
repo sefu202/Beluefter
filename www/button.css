@@ -1,0 +1,41 @@
+/**
+ *
+ */
+
+button {
+    color: white;
+}
+
+.hmibutton {
+    border: 2px solid transparent; 
+    border-radius: 10px; 
+    width: 200px; 
+    height: 50px;
+    text-align: center; 
+    background-color: #505050; 
+    font-size: x-large;
+}
+
+.hmibutton:active{border-color:cyan;}
+
+.hmibutton-active {
+    background-color: green; 
+}
+
+.hmibutton-disabled {
+    color: #A0A0A0; 
+}
+
+.hmibutton-disabled:active {
+    border-color: transparent; 
+}
+
+.hmibutton-invisible {
+    color: transparent;
+    background-color: transparent;
+    border-color:transparent;
+}
+
+.hmibutton-invisible:active {
+    border-color: transparent; 
+}

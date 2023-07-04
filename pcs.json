@@ -1,0 +1,34 @@
+{
+    "groups": [
+        {
+            "type": "buildings",
+            "id": "buildings",
+            "name": "Gebäude",
+            "subsystems": [
+                {
+                    "type": "stall",
+                    "id": "egg",
+                    "name": "Egg",
+                    "subsystems": [
+                        {
+                            "id": "heubelueftung",
+                            "type": "heubelueftung",
+                            "name": "Heubelüftung",
+                            "properties": {
+                                "tachometer": true,
+                                "control-types": ["local", "remote"],
+                                "control-modes": ["manual", "auto"],
+                                "plc-address": "192.168.1.11",
+                                "baseAddress":"40001",
+                                "trace": null
+                            }
+                        }
+                    ]
+                },
+                {
+                    "includeFilePath": "stall2.json"
+                }
+            ]
+        }
+    ]
+}
