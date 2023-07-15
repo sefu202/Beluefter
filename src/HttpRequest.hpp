@@ -13,6 +13,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <vector>
 
 class HttpParseError : public std::exception{
 public:
@@ -28,7 +29,8 @@ public:
 
     const std::string& getMethod() const;
     const std::string& getUrl() const;
-    const std::string& getHeader(const std::string& headerName) const;
+    const std::vector<std::string> getUrlSegments() const;
+    const std::string &getHeader(const std::string &headerName) const;
     const std::map<std::string, std::string>& getHeaders() const;
     const std::string& getBody() const;
 

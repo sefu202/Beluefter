@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 #include "HttpRequest.hpp"
 
@@ -59,6 +60,25 @@ const std::string& HttpRequest::getMethod() const{
 const std::string& HttpRequest::getUrl() const{
     return url;
 }
+
+const std::vector<std::string> HttpRequest::getUrlSegments() const {
+    std::vector<std::string> segments;
+    std::string segment;
+    std::stringstream ss(getUrl());
+
+    if (getUrl()[0] == '/'){
+        std::getline(ss, segment, '/');
+    }
+
+    while(std::getline(ss, segment, '/')){
+        if (segment == ""){
+            throw std::runtime_error("Invalid url string");
+        }
+        segments.push_back(segment);
+    }
+    return segments;
+}
+
 const std::string& HttpRequest::getHeader(const std::string& headerName) const{
     return headers.at(headerName);
 }

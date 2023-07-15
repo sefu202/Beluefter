@@ -68,6 +68,12 @@ int main() {
         }
         HttpRequest httpRequest(request);
 
+        std::cout << "URL: " << httpRequest.getUrl() << std::endl;
+        for (auto& segment : httpRequest.getUrlSegments()){
+            std::cout << "/"<< segment;
+        }
+        std::cout << std::endl;
+
         
         std::string response;
 
