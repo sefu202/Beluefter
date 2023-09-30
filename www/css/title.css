@@ -1,0 +1,9 @@
+.title{
+    margin: 0;
+    padding: 10px;
+    position: absolute;
+    top:80px;
+    border-radius: 10px;
+    background-color: #202020;
+    font-size: 40px;
+}

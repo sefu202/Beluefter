@@ -21,11 +21,9 @@ json HmiButton::handleWebRequest(const HttpRequest& request){
             json requestBody = json::parse(request.getBody());
             if (requestBody == true){
                 m_isOn = true;
-                system("python3 turnOn.py");
             }
             else if (requestBody == false){
                 m_isOn = false;
-                system("python3 turnOff.py");
             }
         }
         catch(...){

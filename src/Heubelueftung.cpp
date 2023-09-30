@@ -60,6 +60,14 @@ void Heubelueftung::simulate()
 }
 
 void Heubelueftung::update(){
+    m_requestFanOn = m_btnControlMode.isOn() || m_btnOn.isOn();
+
+    if (m_requestFanOn) {
+        system("./turnOn.py");
+    }
+    else {
+        system("./turnOff.py");
+    }
 }
 
 json Heubelueftung::handleWebRequest(const HttpRequest& request){

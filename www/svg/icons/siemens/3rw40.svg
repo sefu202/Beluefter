@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg>
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <text x="0" y="15" fill="white">%BMK </text>
+    <text x="0" y="195" fill="white">%NAME </text>
+    <g id="3rw40" stroke="%COLOR">
+        <polygon points="75,50 75,100 125,75" stroke-width="1"/>
+        <polygon points="125,150 75,125 125,100" stroke-width="1"/>
+        <line x1="75" y1="50" x2="75" y2="150" stroke-width="2" />
+        <line x1="125" y1="50" x2="125" y2="150" stroke-width="2" />
+        <line x1="0" y1="100" x2="75" y2="100" stroke-width="2" />
+        <line x1="125" y1="100" x2="200" y2="100" stroke-width="2" />
+        <rect x="0.5" y="25" width="199" height="150" fill="none"/>
+    </g>
+</svg>
