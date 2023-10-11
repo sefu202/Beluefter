@@ -15,66 +15,67 @@
 
 using nlohmann::json;
 
-Heubelueftung::Heubelueftung(const json& systemCfg){
+
+Heubelueftung::Heubelueftung(){
+    registerChild("btnRcOn", m_btnRcOn);
+    registerChild("btnAuto", m_btnAuto);
     registerChild("btnOn", m_btnOn);
-    registerChild("btnControlType", m_btnControlType);
-    registerChild("btnControlMode", m_btnControlMode);
+    registerChild("Q1", m_motorStarterQ1);
+    registerChild("errorDisplay", m_errorDisplay);
 
-    json properties = systemCfg.at("properties");
-    m_hasTachometer = properties.at("tachometer").get<bool>();
+    m_btnRcOn.setDisabled(true);
+    m_btnRcOn.setErrorOnClick("Only displays status");
 
-    for (auto& str : properties.at("control-types")){
-        if (str == "local"){
-            m_controlTypes.push_back(eLocal);
-        }
-        if (str == "remote"){
-            m_controlTypes.push_back(eRemote);
-        }
-    }
-
-    for (auto& str : properties.at("control-modes")){
-        if (str == "manual"){
-            m_controlModes.push_back(eManual);
-        }
-        if (str == "auto"){
-            m_controlModes.push_back(eAutomatic);
-        }
-    }
-
-}
-
-void Heubelueftung::simulate()
-{
-
-    const uint16_t tachoMax = 1455; // 1455 rpm
-
-    m_fanOn = m_requestFanOn;
-
-    if (m_fanOn && m_tacho < tachoMax){
-        m_tacho++;
-    }
-
-    if (m_fanOn && m_tacho > 0){
-        m_tacho--;
-    }
+    m_motorStarterQ1.setBmk("Q1");
+    m_motorStarterQ1.setName("3RW40");
+    m_motorStarterQ1.setBlink(false);
+    m_motorStarterQ1.setColor("black");
 }
 
 void Heubelueftung::update(){
-    m_requestFanOn = m_btnControlMode.isOn() || m_btnOn.isOn();
+    if (!m_btnRcOn){
+        // Btn Auto
+        m_btnAuto.setDisabled(true);
+        m_btnAuto.setErrorOnClick("Remote control is currently disabled");
 
-    if (m_requestFanOn) {
-        system("./turnOn.py");
+        // Btn On
+        m_btnOn.setDisabled(true);
+        m_btnOn.setErrorOnClick("Remote control is currently disabled");
     }
-    else {
-        system("./turnOff.py");
+    else{
+        m_btnAuto.setDisabled(false);
+
+        if (m_btnAuto){
+            m_btnOn.setDisabled(true);
+            m_btnOn.setErrorOnClick("Automatic control is currently enabled");
+        }
+        else{
+            m_btnOn.setDisabled(false);
+        }
     }
 }
 
-json Heubelueftung::handleWebRequest(const HttpRequest& request){
-    simulate();
+void Heubelueftung::simulate(){
+    // Error display
+    m_errorDisplay.setColor("green");
+    m_errorDisplay.setErrorNumber("0000");
+    m_errorDisplay.setErrorText("Heubelüftung läuft");
+
+    m_btnRcOn.setState(true);
+
+    m_motorStarterQ1.setColor("green");
+    m_motorStarterQ1.setBlink(true);
+}
+
+
+json Heubelueftung::handleWebRequest(const json& request){
     json response;
+    simulate();
+    update();
 
-
+    for (auto & [first, second] : getAllChildren()){
+        response[first] = (*second).handleWebRequest(request);
+    }
     
-    return response.dump(4);
+    return response;
 }

@@ -27,7 +27,7 @@ LinuxTcpSocket::LinuxTcpSocket(const LinuxTcpSocket& parent, uint16_t port, ipAd
 void LinuxTcpSocket::bindSocket(uint16_t port, ipAddress interface){
     int opt = 1;
     if (setsockopt(m_socket, SOL_SOCKET, SO_KEEPALIVE | SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))){
-        throw std::runtime_error(std::string("LinuxTcpSocket::bind(): setsockopt(SOL_SOCKET, SO_KEEPALIVE | SO_REUSEADDR | SO_REUSEPORT) failed, reason: ") + strerror(errno));
+        throw std::runtime_error(std::string("LinuxTcpSocket::bindSocket(): setsockopt(SOL_SOCKET, SO_KEEPALIVE | SO_REUSEADDR | SO_REUSEPORT) failed, reason: ") + strerror(errno));
     }
 
     int domain = m_domain == eDomain_Local ? AF_LOCAL : m_domain == eDomain_IPv4 ? AF_INET : AF_INET6;
@@ -36,13 +36,13 @@ void LinuxTcpSocket::bindSocket(uint16_t port, ipAddress interface){
     address.sin_addr.s_addr = htonl(interface);
     address.sin_port = htons(port);
     if (bind(m_socket, (struct sockaddr*) &address, sizeof(address)) < 0) {
-        throw std::runtime_error(std::string("LinuxTcpSocket::bind(): bind() failed, reason: ") + strerror(errno));
+        throw std::runtime_error(std::string("LinuxTcpSocket::bindSocket(): bind() failed, reason: ") + strerror(errno));
     }
 }
 
 void LinuxTcpSocket::listenSocket(uint16_t backlogSize) {
     if (listen(m_socket, backlogSize) < 0){
-        throw std::runtime_error(std::string("LinuxTcpSocket::listen(): listen() failed, reason: ") + strerror(errno));
+        throw std::runtime_error(std::string("LinuxTcpSocket::listenSocket(): listen() failed, reason: ") + strerror(errno));
     }
 }
 
@@ -52,12 +52,24 @@ LinuxTcpSocket LinuxTcpSocket::acceptConnection() {
     int newSocket = accept(m_socket, (struct sockaddr*)&address, (socklen_t*)&addrlen);
 
     if (newSocket < 0){
-        throw std::runtime_error(std::string("LinuxTcpSocket::accept(): accept() failed, reason: ") + strerror(errno));
+        throw std::runtime_error(std::string("LinuxTcpSocket::acceptConnection(): accept() failed, reason: ") + strerror(errno));
     }
 
     LinuxTcpSocket newTcpSocket(*this, ntohs(address.sin_port), /*ntohl(address.sin_addr)*/ 0, newSocket);
 
     return newTcpSocket;
+}
+
+void LinuxTcpSocket::connectSocket(ipAddress ipAddr, uint16_t port){
+    struct sockaddr_in servaddr;
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(ipAddr);
+    servaddr.sin_port = htons(port);
+
+    if (connect(m_socket, (struct sockaddr*)&servaddr, sizeof(servaddr))  != 0){
+        throw std::runtime_error(std::string("LinuxTcpSocket::connectSocket(): connect() failed, reason: ") + strerror(errno));
+    }
+    m_isConnected = true;
 }
 
 size_t LinuxTcpSocket::readData(uint8_t *buffer, size_t maxBufferSize) {
@@ -89,4 +101,9 @@ void LinuxTcpSocket::openSocket() {
     }
 
     m_isOpen = true;
+}
+
+
+bool LinuxTcpSocket::isConnected() const {
+    return m_isConnected;
 }

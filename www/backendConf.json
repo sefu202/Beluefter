@@ -1,0 +1,6 @@
+{
+    "removePrefix" : "/www/",
+    "addPrefix": "http://127.0.0.1:64969/",
+    "postfix": ".json",
+    "updateRate": 100
+}

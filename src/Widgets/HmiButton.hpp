@@ -15,10 +15,7 @@
 #include "HttpRequest.hpp"
 #include "Subsystem.hpp"
 #include "libraries/json.hpp"
-
-class Widget : public Subsystem {
-
-};
+#include "Widget.hpp"
 
 /**
  * @class HmiButton 
@@ -32,7 +29,7 @@ public:
      * @param request received request
      * @return json reply
      */
-    json handleWebRequest(const HttpRequest& request);
+    virtual json handleWebRequest(const json& request) override;
 
     /**
      * @brief Set the State of the button
@@ -75,6 +72,12 @@ public:
      * @return true = button is visible
      */
     bool isVisible() const;
+
+    /**
+     * @brief Check state of button, same as isOn()
+     * @return true = button is on
+     */
+    operator bool () const;
 
 private:
     bool m_isOn = false;            // State of the button

@@ -25,18 +25,15 @@ class Button{
 
         //document.getElementById(buttonId).onclick = event => {this.onClick();};
         this.element.onclick = this.onClick.bind(this);
-        this.update();
-
-        this.intervalId = setInterval(this.update.bind(this), 2000);
+        
+        Updater.registerUpdateFunc(this.update.bind(this))
     }
 
     /**
      * @brief Update the button state
      */
-    async update(){
-        let x = await fetch("http://192.168.1.105:64969/"+this.buttonId);
-        let y = await x.text();
-        let obj = JSON.parse(y);
+    update(j){
+        let obj = j[this.buttonId];
         
         this.isOn = obj.isOn;
         this.isActive = obj.isActive;
@@ -73,13 +70,16 @@ class Button{
      * @brief Execute click action
      */
     async onClick(){
-        if (this.isDisabled){
+        if (this.isDisabled && this.errorOnClick != ""){
             alert(this.errorOnClick);
             return;
         }
         this.isOn = !this.isOn;
-        let x = await fetch("http://192.168.1.105:64969/"+this.buttonId, {method: "POST", body: JSON.stringify(this.isOn)});
-        this.update();
+
+        var j = {};
+        j[this.buttonId] = {isOn: this.isOn};
+
+        postUpdate(j);
 
         this.setButtonStyles();
     }

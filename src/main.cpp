@@ -22,9 +22,9 @@
 void printTree(std::string path, Subsystem& subsystem){
     std::cout << path << std::endl;
     if (!subsystem.getAllChildren().empty()){
-        for (auto& [childId, child] : subsystem.getAllChildren()){
+        /*for (auto& [childId, child] : subsystem.getAllChildren()){
             printTree(path + "/"+ childId, child);
-        }
+        }*/
     }
 }
 
@@ -36,25 +36,7 @@ int main() {
     tcpSocket.bindSocket(64969);
     tcpSocket.listenSocket();
 
-    json heubelueftungCfg;
-    json heubelueftungCfgProperties;
-    heubelueftungCfgProperties["tachometer"] = true;
-    heubelueftungCfgProperties["control-types"] = std::array<std::string,2>({"local", "remote"});
-    heubelueftungCfgProperties["control-modes"] = std::array<std::string,2>({"manual", "auto"});
-
-    heubelueftungCfg["properties"] = heubelueftungCfgProperties;
-
-    Heubelueftung heubelueftung(heubelueftungCfg);
-
-    printTree("/heubelueftung",heubelueftung);
-
-    /*HmiButton btnRcOn;
-    HmiButton btnAuto;
-    HmiButton btnOn;
-
-    btnRcOn.setDisabled(true);
-    btnRcOn.setState(true);
-    btnRcOn.setErrorOnClick("This button only displays status");*/
+    Heubelueftung heubelueftung;
 
     while(1){
         auto conSocket = tcpSocket.acceptConnection();
@@ -68,41 +50,26 @@ int main() {
         }
         HttpRequest httpRequest(request);
 
-        std::cout << "URL: " << httpRequest.getUrl() << std::endl;
+        /*std::cout << "URL: " << httpRequest.getUrl() << std::endl;
         for (auto& segment : httpRequest.getUrlSegments()){
             std::cout << "/"<< segment;
         }
-        std::cout << std::endl;
+        std::cout << std::endl;*/
 
-        
-        std::string response;
+        try{
+            json req = nullptr;
+            if (httpRequest.getMethod() == "POST"){
+                req = json::parse(httpRequest.getBody());
+            }
 
-        //const auto response = heubelueftung.handleWebRequest(httpRequest.getUrl(),httpRequest.getBody());
-        /*if (httpRequest.getUrl().find("btnRcOn") != std::string::npos){
-            response = btnRcOn.handleWebRequest(httpRequest);
+            std::string sendbuffer = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
+            sendbuffer += heubelueftung.handleWebRequest(req).dump(4) + "\r\n\r\n";
+            conSocket.sendData((uint8_t *)sendbuffer.data(), sendbuffer.size());
         }
-        if (httpRequest.getUrl().find("btnAuto") != std::string::npos){
-            response = btnAuto.handleWebRequest(httpRequest);
-        }
-        if (httpRequest.getUrl().find("btnOn") != std::string::npos){
-            response = btnOn.handleWebRequest(httpRequest);
+        catch(...){
+
         }
 
-        btnOn.setDisabled(btnAuto.isOn() || !btnRcOn.isOn());
-        btnAuto.setDisabled(!btnRcOn.isOn());
-
-        if (!btnRcOn.isOn()){
-            btnOn.setErrorOnClick("Remote control not enabled");
-        }
-        if (btnAuto.isOn()){
-            btnOn.setErrorOnClick("Automatic control enabled");
-        }*/
-        
-
-        std::string sendbuffer = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
-        sendbuffer += response + "\r\n\r\n";
-
-        conSocket.sendData((uint8_t *)sendbuffer.data(), sendbuffer.size());
         conSocket.closeSocket();
     }
     tcpSocket.closeSocket();

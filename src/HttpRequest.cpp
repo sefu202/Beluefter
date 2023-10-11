@@ -24,6 +24,7 @@ const char* HttpParseError::what() const noexcept {
 }
 
 HttpRequest::HttpRequest(const std::string& requestRaw){
+    //std::cout << requestRaw << std::endl;
     std::istringstream iss(requestRaw);
     std::string line;
     std::getline(iss, line);
@@ -35,7 +36,8 @@ HttpRequest::HttpRequest(const std::string& requestRaw){
     }
     requestLineStream >> url;
     requestLineStream >> httpVersion;
-    if (httpVersion != "HTTP/1.1"){
+    if (httpVersion != "HTTP/1.1" && httpVersion != "HTTP/1.0"){
+        std::cout << "Http version: " << httpVersion << std::endl;
         throw HttpParseError("Invalid HTTP Version, use HTTP/1.1");
     }
 

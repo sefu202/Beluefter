@@ -60,7 +60,7 @@ public:
      * @param request HTTP Request
      * @return json reply
      */
-    virtual json handleWebRequest(const HttpRequest& request);
+    virtual json handleWebRequest(const json& request);
 
     /**
      * @brief Check if a specific child exists
@@ -81,10 +81,18 @@ public:
      * 
      * @return std::map<std::string, Subsystem>& map of all subsystems, key = subsystem id
      */
-    std::map<std::string, Subsystem>& getAllChildren();
+    std::map<std::string, Subsystem*>& getAllChildren();
+
+    /**
+     * @brief Get the Own Id
+     * 
+     * @return std::string id
+     */
+    std::string getOwnId() const;
 
 private:
 
     Subsystem* m_parent = nullptr;  // Pointer to the parent subsystem
-    std::map<std::string, Subsystem> m_children;    // children map
+    std::map<std::string, Subsystem*> m_children;    // children map
+    std::string m_id;
 };

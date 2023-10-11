@@ -1,0 +1,31 @@
+{
+    "btnRcOn": {
+        "isOn": true,
+        "isDisabled": true,
+        "isVisible": true,
+        "errorOnClick": ""
+    },
+    "btnAuto": {
+        "isOn": true,
+        "isDisabled": false,
+        "isVisible": true,
+        "errorOnClick": ""
+    },
+    "btnOn": {
+        "isOn": true,
+        "isDisabled": true,
+        "isVisible": true,
+        "errorOnClick": "Automatic control is enabled"
+    },
+    "Q1":{
+        "color": "green",
+        "bmk": "Q1",
+        "name": "3RW40",
+        "blink": true
+    },
+    "errorDisplay":{
+        "color":"green",
+        "errorNumber": "0000",
+        "errorText": "Heubelüftung läuft"
+    }
+}

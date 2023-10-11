@@ -14,42 +14,28 @@
 #include <vector>
 #include <string>
 #include "libraries/json.hpp"
-#include "HmiButton.hpp"
-#include "Subsystem.hpp"
+#include "Widgets/HmiButton.hpp"
+#include "Subsystems/Subsystem.hpp"
+#include "Widgets/ErrorDisplay.hpp"
+#include "Widgets/SchematicComponents/GenericComponent.hpp"
 
 
 class Heubelueftung : public Subsystem{
 public:
-    using json = nlohmann::json;
+    Heubelueftung();
 
-    enum ControlTypes : bool{
-        eLocal = false, eRemote = true
-    };
-    enum ControlModes{
-        eManual = false, eAutomatic = true
-    };
-
-    Heubelueftung(const json& systemCfg);
-
+    
+    void update();
 
     void simulate();
 
-    void update();
-
-    json handleWebRequest(const HttpRequest& request);
+    json handleWebRequest(const json& request) override;
 
 private:
-    bool m_hasTachometer;
-    std::vector<ControlTypes> m_controlTypes;
-    std::vector<ControlModes> m_controlModes;
-    std::string m_plcAddress;
-
-    uint16_t m_tacho;
-    bool m_requestFanOn;
-    bool m_fanOn;
-
-    HmiButton m_btnControlType;
-    HmiButton m_btnControlMode;
+    HmiButton m_btnRcOn;
+    HmiButton m_btnAuto;
     HmiButton m_btnOn;
+    GenericComponent m_motorStarterQ1;
+    ErrorDisplay m_errorDisplay;
 
 };

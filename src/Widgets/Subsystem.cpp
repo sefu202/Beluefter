@@ -21,7 +21,8 @@ Subsystem::Subsystem(Subsystem *parent) : m_parent(parent) {
 }
 
 void Subsystem::registerChild(std::string childId, Subsystem& childNode){
-    m_children[childId] = childNode;
+    m_children[childId] = &childNode;
+    childNode.m_id = childId;
     childNode.setParent(*this);
 }
 
@@ -41,7 +42,7 @@ Subsystem& Subsystem::getParent() {
 }
 
 
-nlohmann::json Subsystem::handleWebRequest(const HttpRequest& request) {
+nlohmann::json Subsystem::handleWebRequest(const json& request) {
     json ret;
     ret["error"] = "No WebRequest Handler created for this subsystem";
     // TODO LOG
@@ -55,14 +56,17 @@ bool Subsystem::childExists(std::string childId) const {
 
 Subsystem& Subsystem::getChild(std::string childId){
     if (childExists(childId)){
-        return m_children.at(childId);
+        return *(m_children.at(childId));
     }
     else{
         throw std::runtime_error("Children does not exist");
     }
 }
 
-std::map<std::string, Subsystem>& Subsystem::getAllChildren(){
+std::map<std::string, Subsystem*>& Subsystem::getAllChildren(){
     return m_children;
 }
 
+std::string Subsystem::getOwnId() const {
+    return m_id;
+}

@@ -45,11 +45,15 @@ public:
 
     LinuxTcpSocket acceptConnection();
 
+    void connectSocket(ipAddress ipAddr, uint16_t port);
+
     size_t readData(uint8_t *buffer, size_t maxBufferSize);
 
     void sendData(const uint8_t *buffer, size_t bufferSize);
 
     void closeSocket();
+
+    bool isConnected() const;
 
 protected:
     void openSocket();
@@ -66,6 +70,7 @@ protected:
 
     EDomain m_domain;                               /**< Domain of the Socket (IPv4/IPv6/Local) */
     bool m_isOpen = false;                          /**< Flag to indicate if the socket is open */
+    bool m_isConnected = false;                     /**< Flag to indicate if the socket is connected*/
     int m_socket = 0;                               /**< Socket handle from linux */
     const LinuxTcpSocket *m_parentSocket = nullptr; /**< Parent socket */
     ipAddress m_connectedAddress = uint32_t(0);     /**< IP Address of the other endpoint */

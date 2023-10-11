@@ -14,20 +14,24 @@
 
 using nlohmann::json;
 
-json HmiButton::handleWebRequest(const HttpRequest& request){
-    if (request.getMethod() == "POST" && !m_isDisabled && m_isVisible){
+json HmiButton::handleWebRequest(const json& request){
+    if (request.contains(getOwnId()) && !m_isDisabled && m_isVisible){
         try{
-            std::cout << request.getBody() << std::endl;
-            json requestBody = json::parse(request.getBody());
-            if (requestBody == true){
+            json myRequest = request[getOwnId()];
+            if (myRequest["isOn"] == true){
                 m_isOn = true;
+                // log button
             }
-            else if (requestBody == false){
+            else if (myRequest["isOn"] == false){
                 m_isOn = false;
+                // todo log button
+            }
+            else{
+                // todo log error
             }
         }
         catch(...){
-
+            // todo log error
         }
     }
 
@@ -67,4 +71,8 @@ bool HmiButton::isDisabled() const{
 
 bool HmiButton::isVisible() const {
     return m_isVisible;
+}
+
+HmiButton::operator bool() const {
+    return isOn();
 }

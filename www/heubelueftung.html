@@ -2,7 +2,10 @@
 <html>
     <head>
         <title>Leitsystem</title>
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
         <meta charset="utf8">
+        <script src="js/updater.js"></script>
+        <script src="js/Button.js"></script>
         <script src="js/ErrorDisplay.js"></script>
         <script src="js/navbar.js"></script>
         <script src="js/icons/siemens/3rw40.js"></script>
@@ -14,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="css/groupbox.css"></style>
         <link rel="stylesheet" type="text/css" href="css/horizontal-center.css"></style>
     </head>
-    <body onload="initErrorDisplay();initNavbar('/Leitsystem/Orte/Alp/Heubelüftung');siemens_3rw40_init(); elswitch_init()" style="height: 100%; background-color: #202020; background-repeat: no-repeat; background-image:linear-gradient(0deg, #101010, #303030); background-attachment: fixed; color: white; font-family:arial; ">
+    <body onload="updater();buttonOnLoad();initErrorDisplay();initNavbar('/Leitsystem/Orte/Alp/Heubelüftung');Siemens3RW40OnLoad(); elswitch_init()" style="height: 100%; min-height: 1080px; background-color: #202020; background-repeat: no-repeat; background-image:linear-gradient(0deg, #101010, #303030); background-attachment: fixed; color: white; font-family:arial; ">
 
         <ul id="navbar">
         </ul>
@@ -22,7 +25,7 @@
         <h1 class="title">Steuerung Heubelüftung Alp</h1>
 
         <div class="groupbox" style="position: absolute; top: 550px; right: 0px; left: 0px; height: 300px;">
-            <svg id="Q1" style="position: absolute; top:50px; left: 200px" width="200" height="200"> </svg>
+            <svg id="Q1" style="position: absolute; top:50px; left: 200px" class="Siemens3RW40" width="200" height="200"> </svg>
             <svg id="K1" style="position: absolute; top:50px; left: 400px" width="200" height="200"> </svg>
             <svg id="K2" style="position: absolute; top:50px; left: 600px" width="200" height="200"> </svg>
         </div>
@@ -32,13 +35,13 @@
         <div class="groupbox-vertical" style="position: absolute; left: 0px; top: 200px;">
             <h2 class="horizontal-center">Bedienung</h2>
             <button onclick="fan_onclick(this)" class="hmibutton hmibutton-active hmibutton-disabled" id="btnRcOn">
-                RC On
+                Fern
             </button>
             <button onclick="fan_onclick(this)" class="hmibutton" id="btnAuto">
-                Auto
+                Automatik
             </button>
             <button onclick="fan_onclick(this)" class="hmibutton hmibutton-active" id="btnOn">
-                On
+                Ein
             </button>
         </div>
 
