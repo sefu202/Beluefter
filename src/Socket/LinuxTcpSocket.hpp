@@ -11,7 +11,6 @@
 #ifndef LINUX_TCP_SOCKET
 #define LINUX_TCP_SOCKET 1
 
-#include "ITcpSocket.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
