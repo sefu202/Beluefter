@@ -19,6 +19,8 @@
 #include "Widgets/ErrorDisplay.hpp"
 #include "Widgets/SchematicComponents/GenericComponent.hpp"
 
+#include "Modbus/Client/MbClient.hpp"
+
 
 class Heubelueftung : public Subsystem{
 public:
@@ -37,5 +39,7 @@ private:
     HmiButton m_btnOn;
     GenericComponent m_motorStarterQ1;
     ErrorDisplay m_errorDisplay;
+
+    Modbus::MbClient s7_1200;
 
 };

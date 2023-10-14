@@ -28,7 +28,6 @@ MbClient::MbClient(uint32_t ipAddr, uint16_t port)
 }
 
 void MbClient::connect(){
-    std::cout << "Connect\n";
     m_socket.connectSocket(m_ipAddr, m_port);
 }
 
@@ -51,7 +50,7 @@ std::vector<bool> MbClient::readCoils(uint16_t coilAddress, uint16_t numCoils){
 
 
 bool MbClient::readDiscreteInput(uint16_t inputAddress){
-    return readCoils(inputAddress, 1)[0];
+    return readDiscreteInputs(inputAddress, 1)[0];
 }
 
 

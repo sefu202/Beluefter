@@ -16,7 +16,7 @@
 using nlohmann::json;
 
 
-Heubelueftung::Heubelueftung(){
+Heubelueftung::Heubelueftung() : s7_1200("192.168.1.11", 502) {
     registerChild("btnRcOn", m_btnRcOn);
     registerChild("btnAuto", m_btnAuto);
     registerChild("btnOn", m_btnOn);
@@ -30,9 +30,20 @@ Heubelueftung::Heubelueftung(){
     m_motorStarterQ1.setName("3RW40");
     m_motorStarterQ1.setBlink(false);
     m_motorStarterQ1.setColor("black");
+
+    s7_1200.connect();
+    std::cout << "connected" << std::endl;
 }
 
 void Heubelueftung::update(){
+    try{
+
+        m_btnRcOn.setState(s7_1200.readDiscreteInput(10000));
+    }
+    catch(...){
+    std::cout << "error ocurred" << std::endl;
+    }
+
     if (!m_btnRcOn){
         // Btn Auto
         m_btnAuto.setDisabled(true);
