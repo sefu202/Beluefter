@@ -55,8 +55,11 @@ class Siemens3RW40{
             else{
                 this.actualColor = this.color;
             }
-            this.siemens_3rw40();
         }
+        else {
+            this.actualColor = this.color;
+        }
+        this.siemens_3rw40();
     }
 
     static iconMap = new Map();   // All created icons by id

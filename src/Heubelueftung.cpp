@@ -37,8 +37,22 @@ Heubelueftung::Heubelueftung() : s7_1200("192.168.1.11", 502) {
 
 void Heubelueftung::update(){
     try{
-
+        s7_1200.writeCoil(0, m_btnOn);
         m_btnRcOn.setState(s7_1200.readDiscreteInput(10000));
+        //m_btnOn.setState(s7_1200.readDiscreteInput(10001));
+
+        if(s7_1200.readDiscreteInput(10004)){  // obFailure
+            m_motorStarterQ1.setColor("red");
+        }
+        else if (s7_1200.readDiscreteInput(10001)) {  // bEin
+            m_motorStarterQ1.setColor("green");
+        }
+        else{
+            m_motorStarterQ1.setColor("black");
+        }
+        
+        m_motorStarterQ1.setBlink(!s7_1200.readDiscreteInput(10005) && s7_1200.readDiscreteInput(10001) && !s7_1200.readDiscreteInput(10004)); // !obBypassed && bEin && !obFailure
+
     }
     catch(...){
     std::cout << "error ocurred" << std::endl;
@@ -46,10 +60,12 @@ void Heubelueftung::update(){
 
     if (!m_btnRcOn){
         // Btn Auto
+        m_btnAuto.setState(false);
         m_btnAuto.setDisabled(true);
         m_btnAuto.setErrorOnClick("Remote control is currently disabled");
 
         // Btn On
+        m_btnOn.setState(false);
         m_btnOn.setDisabled(true);
         m_btnOn.setErrorOnClick("Remote control is currently disabled");
     }
@@ -57,6 +73,7 @@ void Heubelueftung::update(){
         m_btnAuto.setDisabled(false);
 
         if (m_btnAuto){
+            m_btnOn.setState(false);
             m_btnOn.setDisabled(true);
             m_btnOn.setErrorOnClick("Automatic control is currently enabled");
         }
